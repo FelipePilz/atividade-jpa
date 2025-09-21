@@ -19,7 +19,7 @@ public interface VisualizacaoRepository extends JpaRepository<Visualizacao, Inte
             ORDER BY COUNT(vis.id) DESC
             LIMIT 10
             """, nativeQuery = true)
-    List<Video> findTopMaisAssistidos();
+    List<Video> findTop10MaisAssistidos();
 
     @Query(value = """
             SELECT u.*

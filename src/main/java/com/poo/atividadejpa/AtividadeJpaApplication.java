@@ -2,20 +2,94 @@ package com.poo.atividadejpa;
 
 import com.poo.atividadejpa.model.*;
 import com.poo.atividadejpa.repository.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootApplication
 public class AtividadeJpaApplication {
 
+    private static final Logger LOG = LoggerFactory.getLogger(AtividadeJpaApplication.class);
+
     public static void main(String[] args) {
         SpringApplication.run(AtividadeJpaApplication.class, args);
+    }
+
+    @Bean
+    CommandLineRunner testQueries(
+            CategoriaRepository categoriaRepository,
+            VideoRepository videoRepository,
+            AvaliacaoRepository avaliacaoRepository,
+            VisualizacaoRepository visualizacaoRepository
+    ) {
+        return args -> {
+            LOG.info("--------------------------");
+
+            var nomeTitulo = "Missão";
+            LOG.info("Buscando videos pelo título '{}' com ordenação...", nomeTitulo);
+            List<Video> videos1 = videoRepository.findByTituloContainingOrderByTituloAsc(nomeTitulo);
+
+            if (videos1.isEmpty()) {
+                LOG.info("Nenhum vídeo encontrado com o título '{}'.", nomeTitulo);
+            } else {
+                videos1.forEach(video -> LOG.info(video.getTitulo()));
+            }
+
+            LOG.info("--------------------------");
+            var nomeCategoria = "Drama";
+            LOG.info("Buscando todos os vídeos da categoria '{}' ordenado pelo título...", nomeCategoria);
+
+            var categoria = categoriaRepository.findByNome(nomeCategoria);
+            if (categoria == null) {
+                LOG.warn("Categoria '{}' não encontrada.", nomeCategoria);
+            } else {
+                var videos2 = videoRepository.findByCategoriaIdOrderByTituloAsc(categoria.getId());
+                if (videos2.isEmpty()) {
+                    LOG.info("Nenhum vídeo encontrado na categoria '{}'.", nomeCategoria);
+                } else {
+                    videos2.forEach(video -> LOG.info(video.getTitulo()));
+                }
+            }
+            LOG.info("--------------------------");
+
+            LOG.info("Buscando os top 10 vídeos mais bem avaliados...");
+            var top10RatedVideos = avaliacaoRepository.findTop10RatedVideos();
+
+            if (!top10RatedVideos.isEmpty()) {
+                top10RatedVideos.forEach(video -> LOG.info(video.getTitulo()));
+            } else {
+                LOG.info("Nenhum vídeo encontrado.");
+            }
+            LOG.info("--------------------------");
+
+
+            LOG.info("Buscando os top 10 vídeos mais assistidos...");
+
+            var topMaisAssistidos = visualizacaoRepository.findTop10MaisAssistidos();
+
+            if (!topMaisAssistidos.isEmpty()) {
+                topMaisAssistidos.forEach(video -> LOG.info(video.getTitulo()));
+            } else {
+                LOG.info("Nenhum vídeo encontrado.");
+            }
+
+            LOG.info("--------------------------");
+            LOG.info("Buscando o usuário que mais assistiu vídeos...");
+            var usuarioMaisAtivo = visualizacaoRepository.findUsuarioMaisAtivo();
+
+            if (usuarioMaisAtivo != null) {
+                LOG.info(usuarioMaisAtivo.getNome());
+            } else {
+                LOG.info("Nenhum usuário encontrado.");
+            }
+            LOG.info("--------------------------");
+
+        };
     }
 
     /* Rodar na primeira vez
