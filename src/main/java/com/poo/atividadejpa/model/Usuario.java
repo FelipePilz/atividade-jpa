@@ -23,6 +23,16 @@ public class Usuario {
     @Column(nullable = false)
     private Timestamp dataCadastro;
 
+    public Usuario() {
+    }
+
+    public Usuario(String nome, String email, String senha, Timestamp dataCadastro) {
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        this.dataCadastro = dataCadastro;
+    }
+
     public Integer getId() {
         return id;
     }

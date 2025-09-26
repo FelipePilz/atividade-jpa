@@ -7,6 +7,16 @@ import java.sql.Timestamp;
 @Entity
 public class Visualizacao {
 
+    public Visualizacao() {
+    }
+
+    public Visualizacao(Perfil perfil, Video video, Timestamp dataHora, Integer progresso) {
+        this.perfil = perfil;
+        this.video = video;
+        this.dataHora = dataHora;
+        this.progresso = progresso;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

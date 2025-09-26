@@ -15,6 +15,14 @@ public class Perfil {
     @ManyToOne(optional = false)
     private Usuario usuario;
 
+    public Perfil() {
+    }
+
+    public Perfil(String nomePerfil, Usuario usuario) {
+        this.nomePerfil = nomePerfil;
+        this.usuario = usuario;
+    }
+
     public Integer getId() {
         return id;
     }

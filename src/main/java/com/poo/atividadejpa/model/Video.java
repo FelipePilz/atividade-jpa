@@ -21,6 +21,16 @@ public class Video {
     @ManyToOne(optional = false)
     private Categoria categoria;
 
+    public Video() {
+    }
+
+    public Video(String titulo, String descricao, Integer duracao, Categoria categoria) {
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.duracao = duracao;
+        this.categoria = categoria;
+    }
+
     public Integer getId() {
         return id;
     }

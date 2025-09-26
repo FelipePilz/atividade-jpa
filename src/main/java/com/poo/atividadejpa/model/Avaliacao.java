@@ -21,6 +21,16 @@ public class Avaliacao {
     @Column(columnDefinition = "TEXT")
     private String comentario;
 
+    public Avaliacao() {
+    }
+
+    public Avaliacao(Perfil perfil, Video video, Integer nota, String comentario) {
+        this.perfil = perfil;
+        this.video = video;
+        this.nota = nota;
+        this.comentario = comentario;
+    }
+
     public Integer getId() {
         return id;
     }
